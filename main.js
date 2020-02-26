@@ -4,7 +4,36 @@ const FULL_HEART = '♥'
 
 // Your JavaScript code goes here!
 
+// error modal won't appear when the page loads
+let modal = document.getElementById("modal")
+modal.className = "hidden"
 
+// 
+let likeButtons = document.querySelectorAll("li.like")
+likeButtons.forEach(likeButton => {
+  likeButton.addEventListener('click', function() {
+    mimicServerCall(url="http://mimicServer.example.com", config={})
+    .then(function(response) {
+      return response;
+    })
+    .then(function(json) {
+      let heart = likeButton.querySelector("span")
+      if (heart.innerHTML === FULL_HEART) {
+        heart.innerHTML = EMPTY_HEART
+        heart.className = ""
+
+      } else if (heart.innerHTML === EMPTY_HEART) {
+        heart.innerHTML = FULL_HEART
+        heart.className = "activated-heart"
+      }
+    })
+    .catch(function(error) {
+      modal.className = ""
+      modal.innerText = `ERROR: ${error.message}`
+      setTimeout(function(){ modal.className = "hidden" }, 5000);
+    });
+  })
+})
 
 
 //------------------------------------------------------------------------------
